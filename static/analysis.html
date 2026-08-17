@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منارة - التحليلات الديناميكية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(ellipse at 20% 50%, #0d1b4b 0%, #050a1a 60%, #000 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--d, 3s) infinite alternate;
+            opacity: 0.5;
+        }
+
+        @keyframes twinkle {
+            from { opacity: 0.7; }
+            to { opacity: 0.1; }
+        }
+
+        .back-link {
+            color: #a78bfa;
+            text-decoration: none;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            text-shadow: 0 0 10px #a78bfa;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .child-select {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(167,139,250,0.35);
+            color: #fff;
+            border-radius: 14px;
+            padding: 12px 16px;
+            font-family: 'Tajawal';
+            font-weight: 700;
+            min-width: 220px;
+            outline: none;
+        }
+
+        .child-select option {
+            color: #000;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 900;
+            color: #a78bfa;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .meters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .meter-group {
+            background: rgba(255,255,255,0.02);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .meter-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .meter-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0%;
+            transition: width 1.5s ease-out;
+        }
+
+        .joy-fill { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .sad-fill { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; }
+        .fear-fill { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
+        .anger-fill { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+
+        .chart-container {
+            height: 400px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: rgba(255,255,255,0.45);
+            padding: 30px;
+            font-size: 14px;
+        }
+
+        .session-count {
+            font-size: 13px;
+            opacity: 0.55;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .meters-grid { grid-template-columns: 1fr 1fr; }
+            .card { padding: 15px; }
+            .chart-container { height: 300px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <a href="/static/parent.html" class="back-link">← العودة للوحة الأب</a>
+
+        <div class="top-row">
+            <h1 id="headerName" style="font-weight: 900; font-size: 24px;">
+                قراءات التحليل اللحظي 🧠
+            </h1>
+
+            <select id="childSelector" class="child-select" onchange="changeChild()">
+                <option value="">جاري جلب الأطفال...</option>
+            </select>
+        </div>
+
+        <div id="sessionCount" class="session-count"></div>
+
+        <div class="card">
+            <div class="card-title">📊 آخر توزيع للمشاعر</div>
+            <div class="meters-grid" id="metersContainer"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📈 منحنى تتبع المشاعر عبر الجلسات</div>
+            <div class="chart-container">
+                <canvas id="multiMoodChart"></canvas>
+            </div>
+
+            <p style="font-size: 11px; opacity: 0.5; margin-top: 20px; text-align: center;">
+                💡 كل نقطة تمثل جلسة محفوظة. مرر الماوس لمعرفة سبب التغير أو نصيحة النظام.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const starsEl = document.getElementById('stars');
+
+        for (let i = 0; i < 100; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.cssText = `
+                width:2px;
+                height:2px;
+                left:${Math.random() * 100}%;
+                top:${Math.random() * 100}%;
+                --d:${2 + Math.random() * 3}s
+            `;
+            starsEl.appendChild(s);
+        }
+
+        let moodChart = null;
+        let currentChildId = null;
+        let childrenData = [];
+
+        function getUserId() {
+            let userId = localStorage.getItem('user_id');
+
+            if (!userId || userId === 'null') {
+                userId = '2';
+                localStorage.setItem('user_id', '2');
+            }
+
+            return userId;
+        }
+
+        async function initPage() {
+            const params = new URLSearchParams(window.location.search);
+            const urlChildId = params.get('child_id');
+            const userId = getUserId();
+
+            try {
+                const childrenRes = await fetch(`/get_children?user_id=${userId}`);
+                childrenData = await childrenRes.json();
+
+                const selector = document.getElementById('childSelector');
+                selector.innerHTML = '';
+
+                if (!childrenData || childrenData.length === 0) {
+                    selector.innerHTML = `<option value="">لا يوجد أطفال</option>`;
+                    document.getElementById('metersContainer').innerHTML =
+                        '<div class="empty-state">لا يوجد أطفال مرتبطين بهذا الحساب</div>';
+                    return;
+                }
+
+                childrenData.forEach(child => {
+                    selector.innerHTML += `
+                        <option value="${child.id}">
+                            ${child.name}
+                        </option>
+                    `;
+                });
+
+                currentChildId = urlChildId || childrenData[0].id;
+                selector.value = currentChildId;
+
+                await loadDynamicAnalysis(currentChildId);
+
+            } catch (err) {
+                console.error("Error loading children:", err);
+                document.getElementById('metersContainer').innerHTML =
+                    '<div class="empty-state">حدث خطأ أثناء جلب الأطفال</div>';
+            }
+        }
+
+        async function changeChild() {
+            const selector = document.getElementById('childSelector');
+            currentChildId = selector.value;
+
+            const newUrl = `/static/analysis.html?child_id=${currentChildId}`;
+            window.history.replaceState({}, '', newUrl);
+
+            await loadDynamicAnalysis(currentChildId);
+        }
+
+        async function loadDynamicAnalysis(childId) {
+            try {
+                clearView();
+
+                const childRes = await fetch(`/child_info/${childId}`);
+                const childInfo = await childRes.json();
+
+                if (childInfo.found) {
+                    document.getElementById('headerName').textContent =
+                        `تحليل مشاعر ${childInfo.name} 🧠`;
+                }
+
+                const sessionsRes = await fetch(`/sessions?child_id=${childId}`);
+                const sessions = await sessionsRes.json();
+
+                document.getElementById('sessionCount').textContent =
+                    `عدد الجلسات المرتبطة بهذا الطفل: ${sessions.length}`;
+
+                if (!Array.isArray(sessions) || sessions.length === 0) {
+                    document.getElementById('metersContainer').innerHTML =
+                        '<div class="empty-state">لا توجد جلسات محفوظة لهذا الطفل حتى الآن</div>';
+                    destroyChart();
+                    return;
+                }
+
+                let validSessions = [];
+
+                for (const session of sessions) {
+                    if (session.emotions) {
+                        validSessions.push(session);
+                    } else {
+                        try {
+                            const res = await fetch(`/analyze_session/${session.session_id}`);
+                            const analysis = await res.json();
+
+                            if (analysis.emotions) {
+                                session.emotions = analysis.emotions;
+                                session.advice = analysis.advice || session.advice;
+                                session.notes = analysis.notes || session.notes;
+                                validSessions.push(session);
+                            }
+                        } catch (e) {
+                            console.log("تعذر تحليل الجلسة", session.session_id);
+                        }
+                    }
+                }
+
+                if (validSessions.length === 0) {
+                    document.getElementById('metersContainer').innerHTML =
+                        '<div class="empty-state">توجد جلسات، لكن لا توجد رسائل قابلة للتحليل داخلها</div>';
+                    destroyChart();
+                    return;
+                }
+
+                document.getElementById('sessionCount').textContent =
+                    `عدد الجلسات المحللة المعروضة في الرسم: ${validSessions.length}`;
+
+                const latestSession = validSessions[0];
+
+                renderMeters(latestSession.emotions);
+                renderMultiChart(validSessions);
+
+            } catch (err) {
+                console.error("Error loading data:", err);
+
+                document.getElementById('metersContainer').innerHTML =
+                    '<div class="empty-state">حدث خطأ أثناء تحميل البيانات</div>';
+
+                destroyChart();
+            }
+        }
+
+        function clearView() {
+            document.getElementById('metersContainer').innerHTML =
+                '<div class="empty-state">جاري تحميل التحليل...</div>';
+
+            document.getElementById('sessionCount').textContent = '';
+        }
+
+        function destroyChart() {
+            if (moodChart) {
+                moodChart.destroy();
+                moodChart = null;
+            }
+        }
+
+        function renderMeters(emotions) {
+            const container = document.getElementById('metersContainer');
+
+            const emoMeta = {
+                joy: { label: 'فرح', class: 'joy-fill' },
+                sadness: { label: 'حزن', class: 'sad-fill' },
+                fear: { label: 'خوف', class: 'fear-fill' },
+                anger: { label: 'غضب', class: 'anger-fill' }
+            };
+
+            container.innerHTML = '';
+
+            Object.keys(emoMeta).forEach(key => {
+                const val = Number(emotions[key] || 0);
+
+                container.innerHTML += `
+                    <div class="meter-group">
+                        <div class="meter-label">
+                            <span>${emoMeta[key].label}</span>
+                            <span>${val}%</span>
+                        </div>
+                        <div class="meter-bar">
+                            <div class="fill ${emoMeta[key].class}" style="width: ${val}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function getReasonFromSession(session) {
+            if (session.notes && session.notes.trim() !== '') {
+                return session.notes;
+            }
+
+            if (
+                session.advice &&
+                session.advice.trim() !== '' &&
+                session.advice !== 'بانتظار التحليل...'
+            ) {
+                return session.advice;
+            }
+
+            if (session.messages && session.messages.length > 0) {
+                const lastMessage = session.messages[session.messages.length - 1];
+                return lastMessage.text || 'لا توجد ملاحظة واضحة';
+            }
+
+            return 'لا توجد ملاحظة واضحة';
+        }
+
+        function renderMultiChart(sessions) {
+            const ctx = document.getElementById('multiMoodChart').getContext('2d');
+
+            const orderedSessions = [...sessions].reverse();
+
+            const labels = [];
+            const joyData = [];
+            const sadnessData = [];
+            const fearData = [];
+            const angerData = [];
+            const notes = [];
+
+            orderedSessions.forEach((session, index) => {
+                const emotions = session.emotions || {};
+
+                labels.push(`جلسة ${index + 1}`);
+
+                joyData.push(Number(emotions.joy || 0));
+                sadnessData.push(Number(emotions.sadness || 0));
+                fearData.push(Number(emotions.fear || 0));
+                angerData.push(Number(emotions.anger || 0));
+
+                notes.push(getReasonFromSession(session));
+            });
+
+            destroyChart();
+
+            moodChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'فرح',
+                            data: joyData,
+                            borderColor: '#10b981',
+                            backgroundColor: '#10b981',
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 5
+                        },
+                        {
+                            label: 'حزن',
+                            data: sadnessData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: '#3b82f6',
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 5
+                        },
+                        {
+                            label: 'خوف',
+                            data: fearData,
+                            borderColor: '#f59e0b',
+                            backgroundColor: '#f59e0b',
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 5
+                        },
+                        {
+                            label: 'غضب',
+                            data: angerData,
+                            borderColor: '#ef4444',
+                            backgroundColor: '#ef4444',
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 5
+                        }
+                    ]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#fff',
+                                font: {
+                                    family: 'Tajawal',
+                                    size: 14
+                                }
+                            }
+                        },
+
+                        tooltip: {
+                            backgroundColor: 'rgba(13, 27, 75, 0.95)',
+                            titleFont: {
+                                family: 'Tajawal'
+                            },
+                            bodyFont: {
+                                family: 'Tajawal'
+                            },
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    return '📝 السبب: ' + notes[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                color: 'rgba(255,255,255,0.4)',
+                                font: {
+                                    family: 'Tajawal'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.05)'
+                            }
+                        },
+
+                        x: {
+                            ticks: {
+                                color: 'rgba(255,255,255,0.6)',
+                                font: {
+                                    family: 'Tajawal',
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = initPage;
+    </script>
+</body>
+</html>

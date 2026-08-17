@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>منارة - لوحة ولي الأمر</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at 20% 50%, #0d1b4b 0%, #050a1a 60%, #000 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .stars { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite alternate; opacity: var(--o, 0.7); }
+        @keyframes twinkle { from { opacity: var(--o, 0.7); } to { opacity: 0.2; } }
+
+        .content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
+
+        .header {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-logo { font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 0 20px #a78bfa; }
+
+        .header-avatar {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(124,58,237,0.4);
+        }
+
+        .dropdown {
+            position: absolute; top: 58px; left: 0;
+            background: rgba(15,10,40,0.98);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 18px;
+            padding: 18px;
+            min-width: 220px;
+            display: none;
+            z-index: 200;
+        }
+
+        .dropdown.open { display: block; }
+
+        .dropdown-item {
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .dropdown-item:hover { background: rgba(124,58,237,0.15); color: #fff; }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.55);
+            padding: 24px 20px 12px;
+        }
+
+        .tip-card {
+            margin: 0 20px;
+            background: rgba(124,58,237,0.15);
+            border: 1px solid rgba(167,139,250,0.2);
+            border-radius: 20px;
+            padding: 18px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+        }
+
+        .stats-row { display: flex; gap: 12px; padding: 0 20px; margin-top: 10px; }
+
+        .stat-card {
+            flex: 1;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px;
+            padding: 16px 10px;
+            text-align: center;
+        }
+
+        .stat-num { font-size: 26px; font-weight: 900; color: #a78bfa; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 20px;
+        }
+
+        .service-item {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .service-item:hover { background: rgba(124,58,237,0.15); transform: translateY(-5px); }
+        .service-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+        .service-name { font-size: 12px; font-weight: 700; }
+
+        .children-grid { display: grid; gap: 15px; padding: 0 20px; }
+
+        .child-profile-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .child-profile-card:hover { border-color: #7c3aed; background: rgba(255,255,255,0.07); }
+
+        .child-progress-bar {
+            height: 12px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .child-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed, #c4b5fd);
+            transition: width 1.5s;
+        }
+
+        .support-scroll-box {
+            margin: 0 20px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 20px;
+            max-height: 340px;
+            overflow-y: auto;
+        }
+
+        .expert-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .call-btn {
+            background: rgba(52,211,153,0.1);
+            border: 1px solid #34d399;
+            color: #34d399;
+            padding: 6px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: 'Tajawal';
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="content">
+
+    <div class="header">
+        <div class="header-logo">🌟 منارة</div>
+
+        <div class="avatar-wrapper">
+            <div class="header-avatar" onclick="toggleDropdown()">👨‍👩‍👧</div>
+
+            <div class="dropdown" id="dropdown">
+                <div class="dropdown-item" onclick="location.href='/static/add_child.html'">👧 إضافة طفل</div>
+                <div class="dropdown-item" onclick="logout()">🚪 خروج</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">💡 ومضة تربوية</div>
+    <div class="tip-card" id="tipCard">جاري تحميل الومضة...</div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-num" id="totalSessions">0</div>
+            <div style="font-size:11px;opacity:0.5">الجلسات</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-num" id="totalMessages">0</div>
+            <div style="font-size:11px;opacity:0.5">الرسائل</div>
+        </div>
+    </div>
+
+    <div class="section-title">🛠️ قائمة الخدمات</div>
+
+    <div class="services-grid">
+        <div class="service-item" onclick="location.href='/static/add_child.html'">
+            <span class="service-icon">👧</span>
+            <span class="service-name">إضافة طفل</span>
+        </div>
+
+        <div class="service-item" onclick="goToSessions()">
+            <span class="service-icon">📋</span>
+            <span class="service-name">الجلسات</span>
+        </div>
+
+        <div class="service-item" onclick="goToAnalysis()">
+            <span class="service-icon">🧠</span>
+            <span class="service-name">تحليلات</span>
+        </div>
+    </div>
+
+    <div class="section-title">👦 أطفالي وحالتهم النفسية</div>
+
+    <div class="children-grid" id="childrenList">
+        <div style="text-align:center; opacity:0.3; padding:20px">
+            جاري جلب الأطفال...
+        </div>
+    </div>
+
+    <div class="section-title">📞 قنوات الدعم والمساندة</div>
+
+    <div class="support-scroll-box">
+
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:15px;line-height:1.8;background:rgba(239,68,68,0.08);padding:10px;border-radius:10px;">
+            إذا شعرت بوجود خطر على الطفل أو حالة عاجلة، لا تتردد في التواصل فورًا مع الجهات المختصة.
+        </p>
+
+        <div class="expert-item">
+            <div>
+                <div style="color:#34d399;font-weight:700;font-size:13px">خط مساندة الطفل</div>
+                <div style="font-size:17px;font-weight:900">116111</div>
+            </div>
+            <button class="call-btn" onclick="location.href='tel:116111'">اتصال</button>
+        </div>
+
+        <div class="expert-item">
+            <div>
+                <div style="color:#34d399;font-weight:700;font-size:13px">وزارة الصحة</div>
+                <div style="font-size:17px;font-weight:900">937</div>
+            </div>
+            <button class="call-btn" onclick="location.href='tel:937'">اتصال</button>
+        </div>
+
+        <div class="expert-item">
+            <div>
+                <div style="color:#34d399;font-weight:700;font-size:13px">الهلال الأحمر</div>
+                <div style="font-size:17px;font-weight:900">997</div>
+            </div>
+            <button class="call-btn" onclick="location.href='tel:997'">اتصال</button>
+        </div>
+
+        <div class="expert-item">
+            <div>
+                <div style="color:#34d399;font-weight:700;font-size:13px">الطوارئ الموحدة</div>
+                <div style="font-size:17px;font-weight:900">911</div>
+            </div>
+            <button class="call-btn" onclick="location.href='tel:911'">اتصال</button>
+        </div>
+
+        <div class="expert-item">
+            <div>
+                <div style="color:#34d399;font-weight:700;font-size:13px">بلاغات العنف الأسري والإيذاء</div>
+                <div style="font-size:17px;font-weight:900">1919</div>
+            </div>
+            <button class="call-btn" onclick="location.href='tel:1919'">اتصال</button>
+        </div>
+
+        <div class="expert-item" style="border-bottom:none;">
+            <div>
+                <div style="color:#34d399;font-weight:700;font-size:13px">اللجنة الوطنية لتعزيز الصحة النفسية</div>
+                <div style="font-size:17px;font-weight:900">920033360</div>
+            </div>
+            <button class="call-btn" onclick="location.href='tel:920033360'">اتصال</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    let childrenData = [];
+
+    const starsEl = document.getElementById('stars');
+
+    for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.cssText = `
+            width:2px;
+            height:2px;
+            left:${Math.random()*100}%;
+            top:${Math.random()*100}%;
+            --d:${2+Math.random()*3}s;
+            --o:0.5
+        `;
+        starsEl.appendChild(s);
+    }
+
+    const parentingTips = [
+        "الاستماع الجيد لطفلك يساعده على الشعور بالأمان والثقة.",
+        "قضاء 10 دقائق يومياً مع الطفل دون مشتتات يعزز الترابط العاطفي.",
+        "استخدام الكلمات الإيجابية يرفع تقدير الطفل لذاته.",
+        "التشجيع على التعبير عن المشاعر يساعد الطفل على الاتزان النفسي.",
+        "النوم المنتظم يؤثر بشكل مباشر على مزاج الطفل وتركيزه.",
+        "التقدير البسيط لمحاولات الطفل يعزز ثقته بنفسه.",
+        "التواصل الهادئ مع الطفل أثناء الغضب يساعده على تعلم التحكم بمشاعره.",
+        "اللعب مع الطفل وسيلة فعالة لبناء علاقة صحية وآمنة.",
+        "سؤال الطفل عن يومه بشكل يومي يساعد على اكتشاف مشكلاته مبكراً.",
+        "تقليل استخدام الجوال أثناء الحديث مع الطفل يشعره بالاهتمام الحقيقي.",
+        "دعم الطفل عند الفشل أهم أحياناً من الاحتفال بالنجاح.",
+        "مراقبة التغيرات المفاجئة في سلوك الطفل تساعد على اكتشاف الضغوط النفسية.",
+        "الطفل يحتاج أن يشعر بأنه مسموع ومفهوم داخل أسرته.",
+        "تعزيز العادات الصحية اليومية ينعكس على الاستقرار النفسي للطفل.",
+        "الثناء على الجهد أفضل من التركيز على النتائج فقط."
+    ];
+
+    function loadRandomTip() {
+        const randomTip = parentingTips[Math.floor(Math.random() * parentingTips.length)];
+        document.getElementById('tipCard').textContent = randomTip;
+    }
+
+    function toggleDropdown() {
+        document.getElementById('dropdown').classList.toggle('open');
+    }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '/static/login.html';
+    }
+
+    function getFirstChildId() {
+        if (!childrenData.length) {
+            alert("لا يوجد أطفال مرتبطين بهذا الحساب");
+            return null;
+        }
+        return childrenData[0].id;
+    }
+
+    function goToAnalysis() {
+        const id = getFirstChildId();
+        if (!id) return;
+        window.location.href = `/static/analysis.html?child_id=${id}`;
+    }
+
+    function goToSessions() {
+        const id = getFirstChildId();
+        if (!id) return;
+        window.location.href = `/static/sessions.html?child_id=${id}`;
+    }
+
+    async function load() {
+        let userId = localStorage.getItem('user_id');
+
+        if (!userId || userId === 'null') {
+            userId = '2';
+            localStorage.setItem('user_id', '2');
+        }
+
+        try {
+            const sRes = await fetch(`/sessions?user_id=${userId}`);
+            const sessions = await sRes.json();
+
+            document.getElementById('totalSessions').textContent = sessions.length;
+
+            const totalMsgs = sessions.reduce((sum, session) => {
+                return sum + (session.messages ? session.messages.length : 0);
+            }, 0);
+
+            document.getElementById('totalMessages').textContent = totalMsgs;
+
+            const cRes = await fetch(`/get_children?user_id=${userId}`);
+            const children = await cRes.json();
+
+            childrenData = children;
+
+            const list = document.getElementById('childrenList');
+            list.innerHTML = '';
+
+            if (children.length === 0) {
+                list.innerHTML = '<div style="text-align:center; opacity:0.3; padding:20px">لا يوجد أطفال مضافين حالياً</div>';
+                return;
+            }
+
+            children.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'child-profile-card';
+
+                card.onclick = () => {
+                    location.href = `/static/analysis.html?child_id=${c.id}`;
+                };
+
+                card.innerHTML = `
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-size:18px;font-weight:900">
+                            ${c.name}
+                        </span>
+
+                        <span style="font-size:20px;font-weight:900;color:#a78bfa">
+                            ${c.score || 0}%
+                        </span>
+                    </div>
+
+                    <div class="child-progress-bar">
+                        <div class="child-progress-fill" style="width:${c.score || 0}%"></div>
+                    </div>
+
+                    <div style="font-size:11px;margin-top:8px;opacity:0.4">
+                        تحليل الصحة النفسية لـ ${c.name} ←
+                    </div>
+                `;
+
+                list.appendChild(card);
+            });
+
+        } catch(e) {
+            console.error("خطأ في جلب البيانات:", e);
+            document.getElementById('childrenList').innerHTML =
+                '<div style="text-align:center;color:#fca5a5;padding:20px">حدث خطأ في تحميل البيانات</div>';
+        }
+    }
+
+    window.onload = () => {
+        load();
+        loadRandomTip();
+    };
+</script>
+
+</body>
+</html>

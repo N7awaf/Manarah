@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منارة - ولي الأمر</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at 20% 50%, #0d1b4b 0%, #050a1a 60%, #000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .stars {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
+            opacity: var(--o, 0.7);
+        }
+        @keyframes twinkle {
+            from { opacity: var(--o, 0.7); transform: scale(1); }
+            to { opacity: 0.2; transform: scale(0.5); }
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .auth-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px;
+            padding: 40px 36px;
+            width: 340px;
+            z-index: 10;
+            animation: fadeUp 0.5s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .auth-logo .icon { font-size: 40px; margin-bottom: 8px; display: block; }
+        .auth-logo h1 {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+        .auth-logo p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: rgba(255,255,255,0.07);
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 24px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 9px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .auth-tab.active {
+            background: #7c3aed;
+            color: #fff;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            margin-bottom: 12px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .auth-input::placeholder { color: rgba(255,255,255,0.35); }
+        .auth-input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(124,58,237,0.4);
+        }
+        .auth-btn:hover { transform: translateY(-2px); }
+
+        .back-link {
+            text-align: center;
+            margin-top: 16px;
+        }
+        .back-link button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+        }
+        .back-link button:hover { color: rgba(255,255,255,0.7); }
+
+        .msg {
+            font-size: 13px;
+            margin-bottom: 10px;
+            text-align: center;
+            display: none;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .error {
+            color: #fca5a5;
+            background: rgba(239,68,68,0.15);
+        }
+        .success {
+            color: #6ee7b7;
+            background: rgba(16,185,129,0.15);
+        }
+
+        .register-only { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="stars" id="stars"></div>
+    <div class="planet" style="width:140px;height:140px;background:radial-gradient(circle at 35% 35%,#4f46e5,#1e1b4b);top:-40px;right:-40px;"></div>
+    <div class="planet" style="width:80px;height:80px;background:radial-gradient(circle at 35% 35%,#059669,#064e3b);bottom:30px;left:-20px;"></div>
+
+    <div class="auth-box">
+        <div class="auth-logo">
+            <span class="icon">👨‍👩‍👧</span>
+            <h1>لوحة ولي الأمر</h1>
+            <p>تابع طفلك مع منارة</p>
+        </div>
+
+        <div class="auth-tabs">
+            <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">دخول</div>
+            <div class="auth-tab" id="tab-register" onclick="switchTab('register')">حساب جديد</div>
+        </div>
+
+        <div class="msg error" id="errorMsg"></div>
+        <div class="msg success" id="successMsg"></div>
+
+        <div class="register-only" id="registerFields">
+            <input class="auth-input" type="text" id="fullname" placeholder="الاسم الكامل" />
+            <input class="auth-input" type="email" id="email" placeholder="البريد الإلكتروني" />
+        </div>
+
+        <input class="auth-input" type="text" id="username" placeholder="اسم المستخدم" />
+        <input class="auth-input" type="password" id="password" placeholder="كلمة المرور" />
+
+        <div class="register-only" id="confirmField">
+            <input class="auth-input" type="password" id="confirm" placeholder="تأكيد كلمة المرور" />
+        </div>
+
+        <button class="auth-btn" id="submitBtn" onclick="submit()">دخول</button>
+
+        <div class="back-link">
+            <button onclick="window.location.href='/'">← رجوع للرئيسية</button>
+        </div>
+    </div>
+
+    <script>
+        const starsEl = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 2.5 + 0.5;
+            s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--o:${0.4+Math.random()*0.6};animation-delay:${Math.random()*4}s;`;
+            starsEl.appendChild(s);
+        }
+
+        let currentTab = 'login';
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+            document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+            document.querySelectorAll('.register-only').forEach(el => {
+                el.style.display = tab === 'register' ? 'block' : 'none';
+            });
+            document.getElementById('submitBtn').textContent = tab === 'login' ? 'دخول' : 'إنشاء الحساب';
+            hideMessages();
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = '❌ ' + msg;
+            el.style.display = 'block';
+        }
+
+        function showSuccess(msg) {
+            const el = document.getElementById('successMsg');
+            el.textContent = '✅ ' + msg;
+            el.style.display = 'block';
+        }
+
+        async function submit() {
+            hideMessages();
+            if (currentTab === 'login') await login();
+            else await register();
+        }
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) { showError('أدخل اسم المستخدم وكلمة المرور'); return; }
+
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    // --- التعديل الجوهري هنا ---
+                    // حفظ رقم ولي الأمر في ذاكرة المتصفح لكي يتعرف عليه النظام في صفحة الأب
+                    localStorage.setItem('user_id', data.user_id); 
+                    window.location.href = '/static/parent.html';
+                } else {
+                    showError('اسم المستخدم أو كلمة المرور غلط');
+                }
+            } catch (err) {
+                showError('حدث خطأ في الاتصال');
+            }
+        }
+
+        async function register() {
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm').value;
+
+            if (!fullname || !email || !username || !password) { showError('يرجى ملء جميع الحقول'); return; }
+            if (password !== confirm) { showError('كلمة المرور غير متطابقة'); return; }
+            if (password.length < 4) { showError('كلمة المرور قصيرة جداً'); return; }
+
+            try {
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullname, email, username, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showSuccess('تم إنشاء الحساب! جاري التحويل...');
+                    // في حال التسجيل الجديد، نفضل أن يقوم ولي الأمر بتسجيل الدخول 
+                    // يدوياً لضمان حفظ الـ user_id بشكل صحيح من السيرفر
+                    setTimeout(() => {
+                        switchTab('login');
+                        showSuccess('الآن سجل دخولك بحسابك الجديد');
+                    }, 1500);
+                } else {
+                    showError(data.message || 'حدث خطأ');
+                }
+            } catch (err) {
+                showError('حدث خطأ في الاتصال');
+            }
+        }
+    </script>
+</body>
+</html>

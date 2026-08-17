@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>منارة - مرحباً</title>
+
+    <style>
+
+        @import url(
+            'https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap'
+        );
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    ellipse at 20% 50%,
+                    #0d1b4b 0%,
+                    #050a1a 60%,
+                    #000 100%
+                );
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            position: relative;
+            padding: 20px;
+
+            color: white;
+        }
+
+        /* =====================================================
+           STARS
+        ===================================================== */
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+
+            animation:
+                twinkle
+                var(--d, 3s)
+                ease-in-out
+                infinite
+                alternate;
+
+            opacity: var(--o, 0.7);
+        }
+
+        @keyframes twinkle {
+
+            from {
+                opacity: var(--o, 0.7);
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0.2;
+                transform: scale(0.5);
+            }
+
+        }
+
+        /* =====================================================
+           PLANETS
+        ===================================================== */
+
+        .planet {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+            z-index: 10;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-text {
+            font-size: 36px;
+            font-weight: 900;
+            color: #fff;
+
+            text-shadow:
+                0 0 40px #a78bfa;
+
+            animation:
+                logopulse
+                3s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+        @keyframes logopulse {
+
+            from {
+                text-shadow:
+                    0 0 30px #a78bfa;
+            }
+
+            to {
+                text-shadow:
+                    0 0 60px #c4b5fd;
+            }
+
+        }
+
+        .welcome-msg {
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 6px;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main-content {
+            display: flex;
+            gap: 24px;
+
+            align-items: center;
+            justify-content: center;
+
+            z-index: 10;
+
+            width: 100%;
+            max-width: 900px;
+
+            flex-wrap: wrap;
+        }
+
+        /* =====================================================
+           STEPS
+        ===================================================== */
+
+        .steps-card {
+
+            background:
+                rgba(255,255,255,0.05);
+
+            backdrop-filter:
+                blur(20px);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            border-radius: 24px;
+
+            padding:
+                30px
+                24px;
+
+            flex: 1;
+
+            min-width: 240px;
+            max-width: 280px;
+
+            animation:
+                fadeUp
+                0.6s
+                ease
+                both;
+        }
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+        .steps-title {
+
+            font-size: 16px;
+            font-weight: 700;
+
+            color: #c4b5fd;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+        }
+
+        .step {
+
+            display: flex;
+
+            align-items:
+                flex-start;
+
+            gap: 12px;
+
+            margin-bottom: 16px;
+        }
+
+        .step-num {
+
+            width: 32px;
+            height: 32px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #5b21b6
+                );
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .step-text {
+
+            color:
+                rgba(255,255,255,0.75);
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            padding-top: 4px;
+        }
+
+        /* =====================================================
+           CENTER
+        ===================================================== */
+
+        .center-card {
+
+            text-align: center;
+
+            flex: 1;
+
+            min-width: 200px;
+            max-width: 300px;
+
+            animation:
+                fadeUp
+                0.6s
+                ease
+                both;
+
+            animation-delay:
+                0.2s;
+        }
+
+        .agent-emoji {
+
+            font-size: 80px;
+
+            display: block;
+
+            animation:
+                float
+                4s
+                ease-in-out
+                infinite
+                alternate;
+
+            margin-bottom: 15px;
+        }
+
+        @keyframes float {
+
+            from {
+                transform:
+                    translateY(0px);
+            }
+
+            to {
+                transform:
+                    translateY(-12px);
+            }
+
+        }
+
+        .center-title {
+
+            font-size: 22px;
+            font-weight: 900;
+
+            color: #fff;
+
+            margin-bottom: 8px;
+        }
+
+        .center-sub {
+
+            font-size: 14px;
+
+            color:
+                rgba(255,255,255,0.5);
+
+            line-height: 1.6;
+
+            margin-bottom: 24px;
+        }
+
+        .btn-start {
+
+            padding:
+                14px
+                32px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #5b21b6
+                );
+
+            color: white;
+
+            border: none;
+
+            border-radius: 14px;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            font-family:
+                'Tajawal',
+                sans-serif;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 25px
+                rgba(124,58,237,0.5);
+
+            transition:
+                all
+                0.3s;
+        }
+
+        .btn-start:hover {
+
+            transform:
+                translateY(-3px);
+        }
+
+        .btn-start:disabled {
+
+            opacity: 0.5;
+
+            cursor:
+                not-allowed;
+
+            transform: none;
+        }
+
+        .waiting-msg {
+
+            font-size: 12px;
+
+            color:
+                rgba(255,255,255,0.4);
+
+            margin-top: 12px;
+
+            min-height: 20px;
+        }
+
+        /* =====================================================
+           QR
+        ===================================================== */
+
+        .qr-card {
+
+            background:
+                rgba(255,255,255,0.05);
+
+            backdrop-filter:
+                blur(20px);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            border-radius: 24px;
+
+            padding:
+                30px
+                24px;
+
+            flex: 1;
+
+            min-width: 240px;
+            max-width: 280px;
+
+            text-align: center;
+
+            animation:
+                fadeUp
+                0.6s
+                ease
+                both;
+
+            animation-delay:
+                0.3s;
+        }
+
+        .qr-title {
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            color: #34d399;
+
+            margin-bottom: 16px;
+        }
+
+        .qr-img-wrapper {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 12px;
+
+            display:
+                inline-block;
+
+            margin-bottom: 16px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.3);
+        }
+
+        .qr-img-wrapper img {
+
+            width: 160px;
+            height: 160px;
+
+            display: block;
+
+            border-radius: 8px;
+        }
+
+        .qr-sub {
+
+            font-size: 13px;
+
+            color:
+                rgba(255,255,255,0.5);
+
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           BACK
+        ===================================================== */
+
+        .back-btn {
+
+            position: fixed;
+
+            top: 20px;
+            left: 20px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            color:
+                rgba(255,255,255,0.6);
+
+            border-radius: 10px;
+
+            padding:
+                8px
+                14px;
+
+            font-size: 13px;
+
+            font-family:
+                'Tajawal',
+                sans-serif;
+
+            cursor: pointer;
+
+            z-index: 20;
+        }
+
+        /* =====================================================
+           DEV PANEL
+        ===================================================== */
+
+        #devPanel {
+
+            display: none;
+
+            position: fixed;
+
+            top: 20px;
+            right: 20px;
+
+            width: 340px;
+            max-width: calc(100vw - 40px);
+
+            max-height: 80vh;
+
+            overflow-y: auto;
+
+            z-index: 100;
+
+            background:
+                rgba(10, 15, 40, 0.96);
+
+            backdrop-filter:
+                blur(25px);
+
+            border:
+                1px solid
+                rgba(167,139,250,0.35);
+
+            border-radius: 20px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,0.5);
+        }
+
+        #devPanel.active {
+            display: block;
+        }
+
+        .dev-title {
+
+            font-size: 18px;
+            font-weight: 900;
+
+            color: #c4b5fd;
+
+            margin-bottom: 6px;
+        }
+
+        .dev-subtitle {
+
+            font-size: 12px;
+
+            color:
+                rgba(255,255,255,0.45);
+
+            margin-bottom: 16px;
+        }
+
+        .dev-status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                6px
+                10px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(52,211,153,0.12);
+
+            color: #34d399;
+
+            font-size: 12px;
+
+            margin-bottom: 16px;
+        }
+
+        .dev-dot {
+
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #34d399;
+
+            box-shadow:
+                0 0 10px #34d399;
+        }
+
+        .dev-section-title {
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color:
+                rgba(255,255,255,0.7);
+
+            margin:
+                12px
+                0
+                8px;
+        }
+
+        .dev-users {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .dev-user {
+
+            width: 100%;
+
+            text-align: right;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            background:
+                rgba(255,255,255,0.05);
+
+            color: white;
+
+            border-radius: 12px;
+
+            padding: 11px;
+
+            cursor: pointer;
+
+            font-family:
+                'Tajawal',
+                sans-serif;
+
+            transition:
+                0.2s;
+        }
+
+        .dev-user:hover {
+
+            background:
+                rgba(124,58,237,0.2);
+
+            border-color:
+                rgba(167,139,250,0.4);
+        }
+
+        .dev-user-name {
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+        .dev-user-email {
+
+            font-size: 11px;
+
+            color:
+                rgba(255,255,255,0.45);
+
+            margin-top: 3px;
+        }
+
+        .dev-children {
+
+            margin-top: 8px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+        }
+
+        .dev-child {
+
+            padding:
+                9px
+                10px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(52,211,153,0.07);
+
+            border:
+                1px solid
+                rgba(52,211,153,0.15);
+
+            cursor: pointer;
+
+            color: white;
+
+            text-align: right;
+
+            font-family:
+                'Tajawal',
+                sans-serif;
+        }
+
+        .dev-child:hover {
+
+            background:
+                rgba(52,211,153,0.14);
+        }
+
+        .dev-child-name {
+
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .dev-child-id {
+
+            font-size: 10px;
+
+            color:
+                rgba(255,255,255,0.4);
+
+            margin-top: 2px;
+        }
+
+        .dev-message {
+
+            font-size: 12px;
+
+            color:
+                rgba(255,255,255,0.45);
+
+            padding:
+                10px
+                0;
+        }
+
+        .dev-close {
+
+            position: absolute;
+
+            top: 12px;
+            left: 12px;
+
+            width: 30px;
+            height: 30px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            color: white;
+
+            cursor: pointer;
+        }
+
+        .dev-toggle {
+
+            display: none;
+
+            position: fixed;
+
+            top: 20px;
+            right: 20px;
+
+            z-index: 90;
+
+            border: none;
+
+            border-radius: 12px;
+
+            padding:
+                9px
+                13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #5b21b6
+                );
+
+            color: white;
+
+            font-family:
+                'Tajawal',
+                sans-serif;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 25px
+                rgba(124,58,237,0.35);
+        }
+
+        .dev-toggle.active {
+            display: block;
+        }
+
+        .dev-selected {
+
+            margin-top: 14px;
+
+            padding: 12px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(124,58,237,0.1);
+
+            border:
+                1px solid
+                rgba(124,58,237,0.2);
+
+            display: none;
+        }
+
+        .dev-selected.active {
+            display: block;
+        }
+
+        .dev-selected-title {
+
+            font-size: 11px;
+
+            color:
+                rgba(255,255,255,0.45);
+
+            margin-bottom: 4px;
+        }
+
+        .dev-selected-value {
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            color: #c4b5fd;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            body {
+
+                padding-top: 70px;
+            }
+
+            .main-content {
+
+                flex-direction: column;
+            }
+
+            .steps-card,
+            .center-card,
+            .qr-card {
+
+                max-width: 360px;
+
+                width: 100%;
+            }
+
+            .logo-text {
+
+                font-size: 30px;
+            }
+
+            #devPanel {
+
+                top: 65px;
+                right: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         STARS
+    ====================================================== -->
+
+    <div
+        class="stars"
+        id="stars"
+    ></div>
+
+
+    <!-- =====================================================
+         DECORATION
+    ====================================================== -->
+
+    <div
+        class="planet"
+        style="
+            width:150px;
+            height:150px;
+            background:
+            radial-gradient(
+                circle at 35% 35%,
+                #4f46e5,
+                #1e1b4b
+            );
+            top:-40px;
+            right:-40px;
+        "
+    ></div>
+
+
+    <div
+        class="planet"
+        style="
+            width:80px;
+            height:80px;
+            background:
+            radial-gradient(
+                circle at 35% 35%,
+                #059669,
+                #064e3b
+            );
+            bottom:30px;
+            left:-20px;
+        "
+    ></div>
+
+
+    <!-- =====================================================
+         BACK
+    ====================================================== -->
+
+    <button
+        class="back-btn"
+        onclick="window.location.href='/'"
+    >
+        ← رجوع
+    </button>
+
+
+    <!-- =====================================================
+         DEV TOGGLE
+         يظهر فقط إذا كان Backend يسمح بـ DEV_MODE
+    ====================================================== -->
+
+    <button
+        id="devToggle"
+        class="dev-toggle"
+        onclick="toggleDevPanel()"
+    >
+        🛠️ أدوات التطوير
+    </button>
+
+
+    <!-- =====================================================
+         DEV PANEL
+    ====================================================== -->
+
+    <div
+        id="devPanel"
+    >
+
+        <button
+            class="dev-close"
+            onclick="toggleDevPanel()"
+        >
+            ×
+        </button>
+
+
+        <div class="dev-title">
+            🛠️ أدوات التطوير
+        </div>
+
+
+        <div class="dev-subtitle">
+            هذه الأدوات تظهر فقط في وضع التطوير.
+        </div>
+
+
+        <div class="dev-status">
+
+            <span class="dev-dot"></span>
+
+            DEV MODE مفعّل
+
+        </div>
+
+
+        <div class="dev-section-title">
+            👨‍👩‍👧 المستخدمون
+        </div>
+
+
+        <div
+            class="dev-users"
+            id="devUsers"
+        >
+
+            <div class="dev-message">
+                جاري تحميل المستخدمين...
+            </div>
+
+        </div>
+
+
+        <div
+            class="dev-selected"
+            id="devSelected"
+        >
+
+            <div class="dev-selected-title">
+                المستخدم المحدد
+            </div>
+
+            <div
+                class="dev-selected-value"
+                id="devSelectedValue"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="header">
+
+        <div class="logo-text">
+            🌟 منارة
+        </div>
+
+
+        <div
+            class="welcome-msg"
+            id="welcomeMsg"
+        >
+            جاري تحميل حسابك...
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="main-content">
+
+
+        <!-- =================================================
+             STEPS
+        ================================================== -->
+
+        <div class="steps-card">
+
+            <div class="steps-title">
+                📋 قبل ما تبدأ
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-num">
+                    1
+                </div>
+
+                <div class="step-text">
+                    تأكد أن والدك ربط حسابك في منارة.
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-num">
+                    2
+                </div>
+
+                <div class="step-text">
+                    افتح رابط أو QR الخاص بحسابك.
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-num">
+                    3
+                </div>
+
+                <div class="step-text">
+                    اضغط على "ابدأ مع منار".
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-num">
+                    4
+                </div>
+
+                <div class="step-text">
+                    تكلم مع منار بشكل طبيعي! 💜
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CENTER
+        ================================================== -->
+
+        <div class="center-card">
+
+            <span class="agent-emoji">
+                🤖
+            </span>
+
+
+            <div
+                class="center-title"
+                id="childName"
+            >
+                أنا منار!
+            </div>
+
+
+            <div
+                class="center-sub"
+                id="agentSub"
+            >
+                جاري تحميل حسابك...
+            </div>
+
+
+            <button
+                class="btn-start"
+                id="startButton"
+                onclick="startChat()"
+                disabled
+            >
+                ابدأ مع منار! 💜
+            </button>
+
+
+            <div
+                class="waiting-msg"
+                id="waitingMsg"
+            ></div>
+
+        </div>
+
+
+        <!-- =================================================
+             QR
+        ================================================== -->
+
+        <div class="qr-card">
+
+            <div class="qr-title">
+                📱 QR حساب الطفل
+            </div>
+
+
+            <div
+                class="qr-img-wrapper"
+                id="qrWrapper"
+            >
+
+                <img
+                    id="qrImg"
+                    src=""
+                    alt="QR"
+                    style="display:none;"
+                />
+
+            </div>
+
+
+            <div
+                class="qr-sub"
+                id="qrSub"
+            >
+                جاري تحميل رمز حسابك...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        // ====================================================
+        // STARS
+        // ====================================================
+
+        const stars =
+            document.getElementById("stars");
+
+
+        for (
+            let i = 0;
+            i < 120;
+            i++
+        ) {
+
+            const s =
+                document.createElement("div");
+
+
+            s.className = "star";
+
+
+            const size =
+                Math.random() * 2.5 + 0.5;
+
+
+            s.style.cssText =
+                `
+                width:${size}px;
+                height:${size}px;
+                left:${Math.random()*100}%;
+                top:${Math.random()*100}%;
+                --d:${2+Math.random()*4}s;
+                --o:${0.4+Math.random()*0.6};
+                animation-delay:${Math.random()*4}s;
+                `;
+
+
+            stars.appendChild(s);
+
+        }
+
+
+        // ====================================================
+        // CHILD ID
+        // ====================================================
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const childId =
+            params.get("child_id");
+
+        const childToken =
+            params.get("token");
+
+
+        // ====================================================
+        // ELEMENTS
+        // ====================================================
+
+        const welcomeMsg =
+            document.getElementById(
+                "welcomeMsg"
+            );
+
+
+        const childName =
+            document.getElementById(
+                "childName"
+            );
+
+
+        const agentSub =
+            document.getElementById(
+                "agentSub"
+            );
+
+
+        const waitingMsg =
+            document.getElementById(
+                "waitingMsg"
+            );
+
+
+        const startButton =
+            document.getElementById(
+                "startButton"
+            );
+
+
+        const qrImg =
+            document.getElementById(
+                "qrImg"
+            );
+
+
+        const qrSub =
+            document.getElementById(
+                "qrSub"
+            );
+
+
+        // ====================================================
+        // ERROR UI
+        // ====================================================
+
+        function showError(message) {
+
+            welcomeMsg.textContent =
+                message;
+
+
+            childName.textContent =
+                "تعذر تحميل الحساب";
+
+
+            agentSub.textContent =
+                "تأكد أن الرابط أو رمز QR صحيح.";
+
+
+            waitingMsg.textContent =
+                "إذا استمرت المشكلة، اطلب من ولي الأمر إنشاء QR جديد.";
+
+
+            startButton.disabled =
+                true;
+
+
+            qrImg.style.display =
+                "none";
+
+
+            qrSub.textContent =
+                "لا يوجد رمز QR متاح.";
+
+        }
+
+
+        // ====================================================
+        // LOAD CHILD
+        // ====================================================
+
+        async function loadChild() {
+
+
+            if (!childId) {
+
+                showError(
+                    "لم يتم تحديد حساب الطفل."
+                );
+
+                return;
+
+            }
+
+
+            if (!/^\d+$/.test(childId)) {
+
+                showError(
+                    "رابط حساب الطفل غير صحيح."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+
+                waitingMsg.textContent =
+                    "جاري تحميل حسابك...";
+
+
+                if (!childToken) {
+                    showError(
+                        "رابط حساب الطفل غير مكتمل. استخدم رمز QR جديد."
+                    );
+                    return;
+                }
+
+                const response =
+                    await fetch(
+                        `/public/child_info/${encodeURIComponent(childId)}?token=${encodeURIComponent(childToken)}&t=${Date.now()}`,
+                        {
+                            method: "GET",
+                            credentials: "same-origin",
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `HTTP ${response.status}`
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Child data:",
+                    data
+                );
+
+
+                if (
+                    !data ||
+                    data.found !== true
+                ) {
+
+                    showError(
+                        "حساب الطفل غير موجود."
+                    );
+
+                    return;
+
+                }
+
+
+                const name =
+                    data.name ||
+                    "صديقي";
+
+
+                welcomeMsg.textContent =
+                    `أهلاً بك يا ${name}!`;
+
+
+                childName.textContent =
+                    `أنا منار يا ${name}!`;
+
+
+                agentSub.textContent =
+                    `جاهزة أسمعك يا ${name} وأساعدك دائماً 💜`;
+
+
+                waitingMsg.textContent =
+                    "حسابك جاهز 💜";
+
+
+                startButton.disabled =
+                    false;
+
+
+                qrImg.src =
+                    `/qrcode/${encodeURIComponent(childId)}?token=${encodeURIComponent(childToken)}&t=${Date.now()}`;
+
+
+                qrImg.onload =
+                    function () {
+
+                        qrImg.style.display =
+                            "block";
+
+                        qrSub.textContent =
+                            "هذا الرمز يخص حساب الطفل. احتفظ به إذا احتجت فتح حسابك من جهاز آخر.";
+
+                    };
+
+
+                qrImg.onerror =
+                    function () {
+
+                        qrImg.style.display =
+                            "none";
+
+                        qrSub.textContent =
+                            "تعذر تحميل رمز QR.";
+
+                    };
+
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Child loading error:",
+                    error
+                );
+
+
+                showError(
+                    "تعذر تحميل حساب الطفل."
+                );
+
+            }
+
+        }
+
+
+        // ====================================================
+        // START CHAT
+        // ====================================================
+
+        function startChat() {
+
+            if (!childId || !childToken) {
+
+                alert(
+                    "لا يوجد رابط صالح لحساب الطفل. استخدم QR جديد."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                startButton.disabled
+            ) {
+
+                return;
+
+            }
+
+
+            window.location.href =
+                `/static/child.html?child_id=${encodeURIComponent(childId)}&token=${encodeURIComponent(childToken)}`;
+
+        }
+
+
+        // ====================================================
+        // DEV MODE
+        // ====================================================
+
+        const devToggle =
+            document.getElementById(
+                "devToggle"
+            );
+
+
+        const devPanel =
+            document.getElementById(
+                "devPanel"
+            );
+
+
+        const devUsers =
+            document.getElementById(
+                "devUsers"
+            );
+
+
+        const devSelected =
+            document.getElementById(
+                "devSelected"
+            );
+
+
+        const devSelectedValue =
+            document.getElementById(
+                "devSelectedValue"
+            );
+
+
+        // ====================================================
+        // CHECK DEV MODE
+        // ====================================================
+        //
+        // لا نعتمد على متغير JS محلي.
+        //
+        // نسأل الـ Backend:
+        //
+        // 200 = DEV_MODE مفعّل
+        // 404 = DEV_MODE مغلق
+        //
+        // ====================================================
+
+        async function checkDevMode() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/get_all_users?t=${Date.now()}`,
+                        {
+                            method: "GET",
+                            credentials: "same-origin",
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (response.status === 404) {
+
+                    // DEV MODE مغلق
+
+                    devToggle.classList.remove(
+                        "active"
+                    );
+
+                    devPanel.classList.remove(
+                        "active"
+                    );
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    devToggle.classList.remove(
+                        "active"
+                    );
+
+                    return;
+
+                }
+
+
+                // DEV MODE مفعّل
+
+                devToggle.classList.add(
+                    "active"
+                );
+
+
+                const users =
+                    await response.json();
+
+
+                renderDevUsers(
+                    users
+                );
+
+            }
+            catch (error) {
+
+                console.log(
+                    "DEV MODE unavailable"
+                );
+
+                devToggle.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+
+
+        // ====================================================
+        // TOGGLE DEV PANEL
+        // ====================================================
+
+        function toggleDevPanel() {
+
+            if (
+                !devToggle.classList.contains(
+                    "active"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            devPanel.classList.toggle(
+                "active"
+            );
+
+        }
+
+
+        // ====================================================
+        // RENDER USERS
+        // ====================================================
+
+        function renderDevUsers(
+            users
+        ) {
+
+            devUsers.innerHTML = "";
+
+
+            if (
+                !Array.isArray(users) ||
+                users.length === 0
+            ) {
+
+                devUsers.innerHTML =
+                    `
+                    <div class="dev-message">
+                        لا يوجد مستخدمون.
+                    </div>
+                    `;
+
+                return;
+
+            }
+
+
+            users.forEach(
+                user => {
+
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    button.className =
+                        "dev-user";
+
+
+                    button.innerHTML =
+                        `
+                        <div class="dev-user-name">
+                            👤 ${escapeHtml(
+                                user.username ||
+                                "بدون اسم"
+                            )}
+                        </div>
+
+                        <div class="dev-user-email">
+                            ${escapeHtml(
+                                user.email ||
+                                ""
+                            )}
+                        </div>
+
+                        <div
+                            class="dev-children"
+                            id="children-${user.id}"
+                        ></div>
+                        `;
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            loadDevChildren(
+                                user.id,
+                                user.username
+                            );
+
+                        }
+                    );
+
+
+                    devUsers.appendChild(
+                        button
+                    );
+
+                }
+            );
+
+        }
+
+
+        // ====================================================
+        // LOAD DEV CHILDREN
+        // ====================================================
+
+        async function loadDevChildren(
+            userId,
+            username
+        ) {
+
+            devSelected.classList.add(
+                "active"
+            );
+
+
+            devSelectedValue.textContent =
+                username ||
+                `User #${userId}`;
+
+
+            const container =
+                document.getElementById(
+                    `children-${userId}`
+                );
+
+
+            if (!container) {
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                `
+                <div class="dev-message">
+                    جاري تحميل الأطفال...
+                </div>
+                `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/dev/get_children?user_id=${encodeURIComponent(userId)}&t=${Date.now()}`,
+                        {
+                            method: "GET",
+                            credentials: "same-origin",
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    if (
+                        response.status === 404
+                    ) {
+
+                        container.innerHTML =
+                            `
+                            <div class="dev-message">
+                                DEV MODE غير مفعّل.
+                            </div>
+                            `;
+
+                    }
+                    else {
+
+                        container.innerHTML =
+                            `
+                            <div class="dev-message">
+                                تعذر تحميل الأطفال.
+                            </div>
+                            `;
+
+                    }
+
+                    return;
+
+                }
+
+
+                const children =
+                    await response.json();
+
+
+                container.innerHTML =
+                    "";
+
+
+                if (
+                    !Array.isArray(children) ||
+                    children.length === 0
+                ) {
+
+                    container.innerHTML =
+                        `
+                        <div class="dev-message">
+                            لا يوجد أطفال لهذا المستخدم.
+                        </div>
+                        `;
+
+                    return;
+
+                }
+
+
+                children.forEach(
+                    child => {
+
+                        const childButton =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        childButton.className =
+                            "dev-child";
+
+
+                        childButton.innerHTML =
+                            `
+                            <div class="dev-child-name">
+                                🧒 ${escapeHtml(
+                                    child.name ||
+                                    "بدون اسم"
+                                )}
+                            </div>
+
+                            <div class="dev-child-id">
+                                ID: ${escapeHtml(
+                                    String(
+                                        child.id
+                                    )
+                                )}
+                            </div>
+                            `;
+
+
+                        childButton.addEventListener(
+                            "click",
+                            function(event) {
+
+                                event.stopPropagation();
+
+
+                                openDevChild(
+                                    child.id
+                                );
+
+                            }
+                        );
+
+
+                        container.appendChild(
+                            childButton
+                        );
+
+                    }
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "DEV children error:",
+                    error
+                );
+
+
+                container.innerHTML =
+                    `
+                    <div class="dev-message">
+                        حدث خطأ أثناء التحميل.
+                    </div>
+                    `;
+
+            }
+
+        }
+
+
+        // ====================================================
+        // OPEN DEV CHILD
+        // ====================================================
+
+        async function openDevChild(
+            selectedChildId
+        ) {
+
+            if (!selectedChildId) {
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `/dev/child_token/${encodeURIComponent(selectedChildId)}?t=${Date.now()}`,
+                    {
+                        method: "GET",
+                        credentials: "same-origin",
+                        cache: "no-store"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (!data.token) {
+                    throw new Error("Token missing");
+                }
+
+                window.location.href =
+                    `/static/child_welcome.html?child_id=${encodeURIComponent(selectedChildId)}&token=${encodeURIComponent(data.token)}`;
+            }
+            catch (error) {
+                console.error("DEV child token error:", error);
+                alert("تعذر إنشاء رابط الطفل التجريبي.");
+            }
+        }
+
+
+        // ====================================================
+        // ESCAPE HTML
+        // ====================================================
+
+        function escapeHtml(
+            value
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.textContent =
+                value == null
+                    ? ""
+                    : String(value);
+
+
+            return div.innerHTML;
+
+        }
+
+
+        // ====================================================
+        // START
+        // ====================================================
+
+        window.addEventListener(
+            "load",
+            function() {
+
+                loadChild();
+
+                checkDevMode();
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

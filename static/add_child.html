@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منارة - إضافة طفل</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at 20% 50%, #0d1b4b 0%, #050a1a 60%, #000 100%);
+            color: #fff;
+            padding-bottom: 40px;
+        }
+
+        .stars { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite alternate; opacity: var(--o, 0.7); }
+
+        @keyframes twinkle {
+            from { opacity: var(--o, 0.7); transform: scale(1); }
+            to { opacity: 0.2; transform: scale(0.5); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.7);
+            border-radius: 10px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover { background: rgba(255,255,255,0.15); }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 20px #a78bfa;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 600px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        .section {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 25px;
+            backdrop-filter: blur(15px);
+            height: 100%;
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 900;
+            color: #a78bfa;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            margin-bottom: 15px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .auth-input option { color: #000; }
+
+        .auth-input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 15px rgba(124,58,237,0.2);
+        }
+
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tag.selected {
+            background: #7c3aed;
+            border-color: #a78bfa;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(124,58,237,0.4);
+        }
+
+        .camera-area {
+            border: 2px dashed rgba(167, 139, 250, 0.3);
+            border-radius: 18px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            background: rgba(124,58,237,0.03);
+        }
+
+        .camera-area:hover {
+            background: rgba(124,58,237,0.08);
+            border-color: #a78bfa;
+        }
+
+        #cameraView {
+            width: 100%;
+            border-radius: 15px;
+            display: none;
+            margin-top: 15px;
+            border: 2px solid #7c3aed;
+        }
+
+        .scan-btn {
+            width: 100%;
+            padding: 12px;
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+            font-family: 'Tajawal';
+        }
+
+        .footer-action {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .save-btn {
+            width: 100%;
+            max-width: 400px;
+            padding: 18px;
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(124,58,237,0.4);
+            transition: 0.3s;
+            font-family: 'Tajawal';
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(124,58,237,0.5);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .msg {
+            font-size: 14px;
+            margin: 15px 20px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .error {
+            color: #fca5a5;
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        .success {
+            color: #6ee7b7;
+            background: rgba(16,185,129,0.15);
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .child-link-box {
+            direction: ltr;
+            word-break: break-all;
+            margin-top: 12px;
+            background: rgba(0,0,0,0.25);
+            padding: 12px;
+            border-radius: 12px;
+            color: #d8b4fe;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .link-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .link-btn {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Tajawal';
+        }
+
+        .open-link-btn {
+            background: #34d399;
+            color: #001;
+        }
+
+        .copy-link-btn {
+            background: #7c3aed;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="stars" id="stars"></div>
+
+    <div class="content">
+
+        <div class="header">
+            <button class="back-btn" onclick="window.location.href='/static/parent.html'">←</button>
+            <div class="header-title">👧 إضافة طفل جديد</div>
+        </div>
+
+        <div class="main-grid">
+
+            <div class="section">
+                <div class="section-label">📝 المعلومات الأساسية</div>
+
+                <input class="auth-input" type="text" id="childName" placeholder="اسم الطفل *" />
+
+                <div style="display: flex; gap: 10px;">
+                    <select class="auth-input" id="childAge">
+                        <option value="">العمر *</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+
+                    <select class="auth-input" id="childGender">
+                        <option value="">الجنس *</option>
+                        <option value="male">ولد</option>
+                        <option value="female">بنت</option>
+                    </select>
+                </div>
+
+                <select class="auth-input" id="childOrder">
+                    <option value="">ترتيبه في العائلة</option>
+                    <option value="الأول">الأول</option>
+                    <option value="الثاني">الثاني</option>
+                    <option value="الثالث">الثالث</option>
+                    <option value="الرابع">الرابع</option>
+                    <option value="الخامس فأكثر">الخامس فأكثر</option>
+                    <option value="وحيد">وحيد</option>
+                </select>
+
+                <div class="section-label" style="margin-top: 20px;">💡 معلومات إضافية</div>
+
+                <select class="auth-input" id="childMood">
+                    <option value="">طبع الطفل العام</option>
+                    <option value="هادئ">هادئ</option>
+                    <option value="نشيط">نشيط</option>
+                    <option value="خجول">خجول</option>
+                    <option value="اجتماعي">اجتماعي</option>
+                </select>
+
+                <input class="auth-input" type="text" id="childNotes" placeholder="ملاحظات خاصة مثل: يخاف من الظلام" />
+            </div>
+
+            <div class="section">
+                <div class="section-label">⭐ اهتمامات الطفل</div>
+
+                <div class="tags-row" id="interestTags">
+                    <div class="tag" onclick="toggleTag(this)">⚽ رياضة</div>
+                    <div class="tag" onclick="toggleTag(this)">🎨 رسم</div>
+                    <div class="tag" onclick="toggleTag(this)">📚 قراءة</div>
+                    <div class="tag" onclick="toggleTag(this)">🎮 ألعاب</div>
+                    <div class="tag" onclick="toggleTag(this)">🔬 علوم</div>
+                    <div class="tag" onclick="toggleTag(this)">🌍 طبيعة</div>
+                    <div class="tag" onclick="toggleTag(this)">🤖 تقنية</div>
+                </div>
+
+                <input class="auth-input" type="text" id="otherInterests" placeholder="اهتمامات أخرى" />
+
+                <div class="section-label" style="margin-top: 25px;">📷 ربط جهاز الطفل</div>
+
+                <div class="camera-area" onclick="startCamera()">
+                    <div style="font-size: 35px; margin-bottom: 10px;">📷</div>
+                    <p style="font-size: 13px; opacity: 0.6;">
+                        صوّر الباركود الظاهر في جهاز الطفل للربط
+                    </p>
+                    <p style="font-size: 11px; opacity: 0.4; margin-top: 8px;">
+                        أو بعد الحفظ سيظهر رابط مباشر لواجهة الطفل
+                    </p>
+                </div>
+
+                <video id="cameraView" autoplay playsinline></video>
+
+                <button class="scan-btn" id="scanBtn" onclick="scanQR()">
+                    🔍 مسح الباركود
+                </button>
+
+                <canvas id="canvas" style="display:none"></canvas>
+
+                <div id="scanResult" style="display:none; color: #34d399; margin-top: 10px; font-weight: 700; text-align: center;">
+                    ✅ تم الربط بنجاح!
+                </div>
+            </div>
+        </div>
+
+        <div class="msg error" id="errorMsg"></div>
+        <div class="msg success" id="successMsg"></div>
+
+        <div class="footer-action">
+            <button class="save-btn" id="saveBtn" onclick="saveChild()">حفظ وإضافة الطفل ✓</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+
+    <script>
+        const starsEl = document.getElementById('stars');
+
+        for (let i = 0; i < 100; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 2 + 1;
+            s.style.cssText = `
+                width:${size}px;
+                height:${size}px;
+                left:${Math.random()*100}%;
+                top:${Math.random()*100}%;
+                --d:${2+Math.random()*4}s;
+                --o:${0.4+Math.random()*0.6};
+            `;
+            starsEl.appendChild(s);
+        }
+
+        let stream = null;
+        let scannedChildId = null;
+        let createdChildLink = null;
+
+        function toggleTag(el) {
+            el.classList.toggle('selected');
+        }
+
+        function getSelectedInterests() {
+            const tags = document.querySelectorAll('#interestTags .tag.selected');
+            const selected = Array.from(tags).map(t => t.textContent.trim());
+
+            const other = document.getElementById('otherInterests').value.trim();
+
+            if (other) {
+                selected.push(other);
+            }
+
+            return selected.join('، ');
+        }
+
+        function showError(message) {
+            const err = document.getElementById('errorMsg');
+            const success = document.getElementById('successMsg');
+
+            success.style.display = 'none';
+            err.textContent = message;
+            err.style.display = 'block';
+
+            err.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showSuccess(html) {
+            const err = document.getElementById('errorMsg');
+            const success = document.getElementById('successMsg');
+
+            err.style.display = 'none';
+            success.innerHTML = html;
+            success.style.display = 'block';
+
+            success.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+
+                const video = document.getElementById('cameraView');
+
+                video.srcObject = stream;
+                video.style.display = 'block';
+
+                document.getElementById('scanBtn').style.display = 'block';
+
+            } catch (err) {
+                alert('تعذر فتح الكاميرا. على iPhone قد تحتاج HTTPS، ويمكنك استخدام الرابط المباشر بعد الحفظ.');
+            }
+        }
+
+        function scanQR() {
+            const video = document.getElementById('cameraView');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            ctx.drawImage(video, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+                try {
+                    const url = new URL(code.data);
+                    scannedChildId = url.searchParams.get('child_id') || '1';
+                } catch {
+                    scannedChildId = '1';
+                }
+
+                document.getElementById('scanResult').style.display = 'block';
+
+                if (stream) {
+                    stream.getTracks().forEach(t => t.stop());
+                }
+
+                video.style.display = 'none';
+                document.getElementById('scanBtn').style.display = 'none';
+
+            } else {
+                alert('حاول مرة أخرى، لم يتم التعرف على الباركود');
+            }
+        }
+
+        async function saveChild() {
+            const userId = localStorage.getItem('user_id');
+
+            const name = document.getElementById('childName').value.trim();
+            const age = document.getElementById('childAge').value;
+            const gender = document.getElementById('childGender').value;
+            const interests = getSelectedInterests();
+
+            if (!userId || userId === 'null') {
+                showError('❌ يجب تسجيل الدخول أولاً');
+                return;
+            }
+
+            if (!name || !age || !gender) {
+                showError('❌ يرجى تعبئة الاسم والعمر والجنس');
+                return;
+            }
+
+            const payload = {
+                user_id: parseInt(userId),
+                name: name,
+                age: age,
+                gender: gender,
+                interests: interests
+            };
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'جاري الحفظ...';
+
+            try {
+                const res = await fetch('/add_child', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.status === 422) {
+                    const detail = await res.json();
+                    console.error("Validation Error:", detail);
+
+                    showError('❌ خطأ في البيانات المرسلة');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'حفظ وإضافة الطفل ✓';
+                    return;
+                }
+
+                const data = await res.json();
+
+                if (data.success) {
+                    const childId = data.child_id;
+
+                    createdChildLink =
+                        `${window.location.origin}/static/child.html?child_id=${childId}`;
+
+                    showSuccess(`
+                        ✅ تم إضافة ${name} بنجاح!<br><br>
+
+                        رابط واجهة الطفل:<br>
+
+                        <div class="child-link-box">
+                            ${createdChildLink}
+                        </div>
+
+                        <div class="link-actions">
+                            <button class="link-btn open-link-btn" onclick="openChildPage()">
+                                فتح واجهة الطفل 👧
+                            </button>
+
+                            <button class="link-btn copy-link-btn" onclick="copyChildLink()">
+                                نسخ الرابط 🔗
+                            </button>
+                        </div>
+                    `);
+
+                    saveBtn.textContent = 'تمت الإضافة ✓';
+
+                } else {
+                    showError(data.message || '❌ فشل في إضافة الطفل');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'حفظ وإضافة الطفل ✓';
+                }
+
+            } catch (err) {
+                console.error("Fetch Error:", err);
+
+                showError('❌ حدث خطأ في الاتصال بالسيرفر');
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'حفظ وإضافة الطفل ✓';
+            }
+        }
+
+        function openChildPage() {
+            if (!createdChildLink) {
+                showError('❌ لا يوجد رابط طفل حتى الآن');
+                return;
+            }
+
+            window.location.href = createdChildLink;
+        }
+
+        async function copyChildLink() {
+            if (!createdChildLink) {
+                showError('❌ لا يوجد رابط طفل حتى الآن');
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(createdChildLink);
+                alert('تم نسخ الرابط ✅');
+            } catch {
+                prompt('انسخ الرابط يدوياً:', createdChildLink);
+            }
+        }
+    </script>
+</body>
+</html>
