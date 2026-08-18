@@ -1,7 +1,7 @@
 # Manarah — AI Voice Companion for Children
 
 <p align="center">
-  <img src="screenshots/Main Entry.png" alt="Manarah AI Companion" width="700">
+  <img src="Screenshots/Main Entry.png" alt="Manarah AI Companion" width="700">
 </p>
 
 <h3 align="center">
@@ -763,7 +763,7 @@ The screenshots below walk through the complete Manarah experience — from a pa
 ### 1. Login
 
 <p align="center">
-  <img src="screenshots/login.png" alt="Manarah Login Screen" width="380">
+  <img src="Screenshots/login.png" alt="Manarah Login Screen" width="380">
 </p>
 
 The parent authentication screen. Parents sign in to access the monitoring dashboard and manage their children's profiles.
@@ -773,7 +773,7 @@ The parent authentication screen. Parents sign in to access the monitoring dashb
 ### 2. Main Entry
 
 <p align="center">
-  <img src="screenshots/Main Entry.png" alt="Manarah Main Entry Page" width="380">
+  <img src="Screenshots/Main Entry.png" alt="Manarah Main Entry Page" width="380">
 </p>
 
 The main Manarah entry page where the user chooses between the parent and child experience.
@@ -783,7 +783,7 @@ The main Manarah entry page where the user chooses between the parent and child 
 ### 3. Add Child
 
 <p align="center">
-  <img src="screenshots/add child.png" alt="Add Child Profile" width="380">
+  <img src="Screenshots/add child.png" alt="Add Child Profile" width="380">
 </p>
 
 Parents create a profile for each child, including name, age, gender, and interests. This information personalizes the AI's conversation style.
@@ -793,7 +793,7 @@ Parents create a profile for each child, including name, age, gender, and intere
 ### 4. Device Linking
 
 <p align="center">
-  <img src="screenshots/Device Linking.png" alt="Child Device Linking via QR Code" width="380">
+  <img src="Screenshots/Device Linking.png" alt="Child Device Linking via QR Code" width="380">
 </p>
 
 The QR-code linking process between the parent's account and the child's device, allowing the child to access a limited, safe interface.
@@ -803,7 +803,7 @@ The QR-code linking process between the parent's account and the child's device,
 ### 5. Child Voice Interaction
 
 <p align="center">
-  <img src="screenshots/Child Voice Interaction.png" alt="Child Speaking with Manarah" width="380">
+  <img src="Screenshots/Child Voice Interaction.png" alt="Child Speaking with Manarah" width="380">
 </p>
 
 The child speaking with Manarah. This demonstrates the project's main differentiator: **voice-first interaction**.
@@ -813,7 +813,7 @@ The child speaking with Manarah. This demonstrates the project's main differenti
 ### 6. Parent Dashboard
 
 <p align="center">
-  <img src="screenshots/Parent Dashboard.png" alt="Parent Dashboard Overview" width="700">
+  <img src="Screenshots/Parent Dashboard.png" alt="Parent Dashboard Overview" width="700">
 </p>
 
 The parent's dashboard, showing an overview of the child's profile, emotional indicators, session history, and alert status. This is one of the most important screenshots.
@@ -823,7 +823,7 @@ The parent's dashboard, showing an overview of the child's profile, emotional in
 ### 7. Session Review
 
 <p align="center">
-  <img src="screenshots/Session Review.png" alt="Session Review with Transcript and Recommendation" width="700">
+  <img src="Screenshots/Session Review.png" alt="Session Review with Transcript and Recommendation" width="700">
 </p>
 
 A detailed session view including the transcript, the AI-generated recommendation, and any parent notes attached to the session. This screenshot demonstrates the project's supervision model.
@@ -833,7 +833,7 @@ A detailed session view including the transcript, the AI-generated recommendatio
 ### 8. Emotional Analysis
 
 <p align="center">
-  <img src="screenshots/Emotional Analysis.png" alt="Emotional Trend Analysis" width="700">
+  <img src="Screenshots/Emotional Analysis.png" alt="Emotional Trend Analysis" width="700">
 </p>
 
 The emotional trend view across multiple sessions, showing how joy, sadness, fear, and anger indicators evolve over time.
@@ -843,7 +843,7 @@ The emotional trend view across multiple sessions, showing how joy, sadness, fea
 ### 9. Safety Alert
 
 <p align="center">
-  <img src="screenshots/Safety Alert.png" alt="Safety Alert Example" width="700">
+  <img src="Screenshots/Safety Alert.png" alt="Safety Alert Example" width="700">
 </p>
 
 A dashboard alert generated when the safety detection layer identifies a `warning` or `danger` level concern in the child's conversation.
@@ -853,7 +853,7 @@ A dashboard alert generated when the safety detection layer identifies a `warnin
 ### 10. Support and Assistance Channels
 
 <p align="center">
-  <img src="screenshots/Support and Assistance Channels.png" alt="Support and Emergency Contact Channels" width="380">
+  <img src="Screenshots/Support and Assistance Channels.png" alt="Support and Emergency Contact Channels" width="380">
 </p>
 
 The dashboard's list of official Saudi support and emergency contact channels, available to parents at any time.
