@@ -1,7 +1,7 @@
 # Manarah — AI Voice Companion for Children
 
 <p align="center">
-  <img src="docs/images/manarah-banner.png" alt="Manarah AI Companion">
+  <img src="screenshots/Main Entry.png" alt="Manarah AI Companion" width="700">
 </p>
 
 <h3 align="center">
@@ -146,7 +146,7 @@ Manarah contains a dedicated safety detection layer.
 The child's original message can be classified into:
 
 | Level     | Meaning                                         |
-| --------- | ----------------------------------------------- |
+| --------- | ------------------------------------------------ |
 | `safe`    | No clear danger detected                        |
 | `warning` | Concerning content requiring parental attention |
 | `danger`  | Serious safety concern                          |
@@ -524,12 +524,12 @@ The `SessionManager` acts as the central orchestrator of the session lifecycle, 
 
 # Major Modules
 
-| Module                      | Main Responsibility                                   |
-| --------------------------- | ----------------------------------------------------- |
-| Child Interaction Interface | Voice-based interaction with the child                |
-| Parent Monitoring Dashboard | Session monitoring and emotional analytics            |
-| Core AI Engine              | Speech processing, RAG, LLM, safety detection and TTS |
-| Backend Services            | API requests, authentication, storage and alerts      |
+| Module                      | Main Responsibility                                    |
+| ---------------------------- | ------------------------------------------------------- |
+| Child Interaction Interface | Voice-based interaction with the child                  |
+| Parent Monitoring Dashboard | Session monitoring and emotional analytics              |
+| Core AI Engine               | Speech processing, RAG, LLM, safety detection and TTS   |
+| Backend Services              | API requests, authentication, storage and alerts        |
 
 ### Child Interaction Interface
 
@@ -568,19 +568,19 @@ The `SessionManager` acts as the central orchestrator of the session lifecycle, 
 
 # Technology Stack
 
-| Layer               | Technology               |
-| ------------------- | ------------------------ |
-| Frontend            | HTML, CSS, JavaScript    |
-| Backend             | Python, FastAPI          |
-| LLM                 | Groq API                 |
-| Safety Model        | Groq-hosted safety model |
-| Speech-to-Text      | OpenAI Whisper           |
-| Text-to-Speech      | OpenAI TTS               |
-| Knowledge Retrieval | RAG                      |
-| Database            | SQLite                   |
-| Email Alerts        | SMTP                     |
-| Authentication      | Backend authentication   |
-| Architecture        | Client-Server            |
+| Layer               | Technology                |
+| -------------------- | -------------------------- |
+| Frontend             | HTML, CSS, JavaScript      |
+| Backend               | Python, FastAPI            |
+| LLM                   | Groq API                   |
+| Safety Model           | Groq-hosted safety model  |
+| Speech-to-Text        | OpenAI Whisper              |
+| Text-to-Speech         | OpenAI TTS                 |
+| Knowledge Retrieval    | RAG                        |
+| Database                | SQLite                     |
+| Email Alerts            | SMTP                       |
+| Authentication          | Backend authentication     |
+| Architecture             | Client-Server               |
 
 ---
 
@@ -615,6 +615,18 @@ Manarah/
 │   ├── child_welcome.html
 │   ├── sessions.html
 │   └── analysis.html
+│
+├── screenshots/
+│   ├── login.png
+│   ├── Main Entry.png
+│   ├── add child.png
+│   ├── Device Linking.png
+│   ├── Child Voice Interaction.png
+│   ├── Parent Dashboard.png
+│   ├── Session Review.png
+│   ├── Emotional Analysis.png
+│   ├── Safety Alert.png
+│   └── Support and Assistance Channels.png
 │
 ├── requirements.txt
 ├── .env.example
@@ -708,13 +720,13 @@ The dashboard includes access to support resources for situations requiring addi
 The project documentation identifies the following Saudi support channels:
 
 | Service                                     |        Number |
-| ------------------------------------------- | ------------: |
-| Child Support Line                          |    **116111** |
-| Ministry of Health                          |       **937** |
-| Saudi Red Crescent                          |       **997** |
-| Unified Emergency                           |       **911** |
-| Domestic Violence & Abuse Reports           |      **1919** |
-| National Center for Mental Health Promotion | **920033360** |
+| --------------------------------------------- | -------------: |
+| Child Support Line                            |    **116111** |
+| Ministry of Health                            |       **937** |
+| Saudi Red Crescent                            |       **997** |
+| Unified Emergency                             |       **911** |
+| Domestic Violence & Abuse Reports             |      **1919** |
+| National Center for Mental Health Promotion   | **920033360** |
 
 These resources are presented as support options and do not replace professional medical or emergency services.
 
@@ -746,95 +758,105 @@ The project documentation reports an average response latency of approximately *
 
 # Screenshots
 
-The repository should include a small set of carefully selected screenshots rather than every screen.
+The screenshots below walk through the complete Manarah experience — from a parent creating an account, to a child having a voice conversation, to the parent reviewing emotional trends and safety alerts.
 
-### 1. Main Entry
+### 1. Login
 
-**Add image here:**
+<p align="center">
+  <img src="screenshots/login.png" alt="Manarah Login Screen" width="380">
+</p>
 
-`docs/images/01-main-entry.png`
-
-Show the main Manarah entry page where the user chooses between the parent and child experience.
-
----
-
-### 2. Parent Dashboard
-
-**Add image here:**
-
-`docs/images/02-parent-dashboard.png`
-
-Show the parent's dashboard with:
-
-* Child profile
-* Emotional indicators
-* Session history
-* Alert status
-
-This is one of the most important screenshots.
+The parent authentication screen. Parents sign in to access the monitoring dashboard and manage their children's profiles.
 
 ---
 
-### 3. Child Voice Interaction
+### 2. Main Entry
 
-**Add image here:**
+<p align="center">
+  <img src="screenshots/Main Entry.png" alt="Manarah Main Entry Page" width="380">
+</p>
 
-`docs/images/03-child-agent.png`
-
-Show the child speaking with Manarah.
-
-This demonstrates the project's main differentiator: **voice-first interaction**.
+The main Manarah entry page where the user chooses between the parent and child experience.
 
 ---
 
-### 4. Emotional Analysis
+### 3. Add Child
 
-**Add image here:**
+<p align="center">
+  <img src="screenshots/add child.png" alt="Add Child Profile" width="380">
+</p>
 
-`docs/images/04-emotional-analysis.png`
-
-Show the emotional trend graph across multiple sessions.
-
-Ideally, capture a session where one emotional indicator changes significantly.
+Parents create a profile for each child, including name, age, gender, and interests. This information personalizes the AI's conversation style.
 
 ---
 
-### 5. Session Review
+### 4. Device Linking
 
-**Add image here:**
+<p align="center">
+  <img src="screenshots/Device Linking.png" alt="Child Device Linking via QR Code" width="380">
+</p>
 
-`docs/images/05-session-review.png`
-
-Show:
-
-* Transcript
-* AI-generated recommendation
-* Parent notes
-* Session information
-
-This screenshot demonstrates the project's supervision model.
+The QR-code linking process between the parent's account and the child's device, allowing the child to access a limited, safe interface.
 
 ---
 
-### 6. Safety Alert
+### 5. Child Voice Interaction
 
-**Add image here:**
+<p align="center">
+  <img src="screenshots/Child Voice Interaction.png" alt="Child Speaking with Manarah" width="380">
+</p>
 
-`docs/images/06-safety-alert.png`
-
-Show a dashboard alert or a safe demonstration of the danger-detection workflow.
-
-**Do not use real children's personal information in repository screenshots.**
+The child speaking with Manarah. This demonstrates the project's main differentiator: **voice-first interaction**.
 
 ---
 
-### 7. Device Linking
+### 6. Parent Dashboard
 
-**Add image here:**
+<p align="center">
+  <img src="screenshots/Parent Dashboard.png" alt="Parent Dashboard Overview" width="700">
+</p>
 
-`docs/images/07-device-linking.png`
+The parent's dashboard, showing an overview of the child's profile, emotional indicators, session history, and alert status. This is one of the most important screenshots.
 
-Show the QR-code linking process between the parent's account and the child's device.
+---
+
+### 7. Session Review
+
+<p align="center">
+  <img src="screenshots/Session Review.png" alt="Session Review with Transcript and Recommendation" width="700">
+</p>
+
+A detailed session view including the transcript, the AI-generated recommendation, and any parent notes attached to the session. This screenshot demonstrates the project's supervision model.
+
+---
+
+### 8. Emotional Analysis
+
+<p align="center">
+  <img src="screenshots/Emotional Analysis.png" alt="Emotional Trend Analysis" width="700">
+</p>
+
+The emotional trend view across multiple sessions, showing how joy, sadness, fear, and anger indicators evolve over time.
+
+---
+
+### 9. Safety Alert
+
+<p align="center">
+  <img src="screenshots/Safety Alert.png" alt="Safety Alert Example" width="700">
+</p>
+
+A dashboard alert generated when the safety detection layer identifies a `warning` or `danger` level concern in the child's conversation.
+
+---
+
+### 10. Support and Assistance Channels
+
+<p align="center">
+  <img src="screenshots/Support and Assistance Channels.png" alt="Support and Emergency Contact Channels" width="380">
+</p>
+
+The dashboard's list of official Saudi support and emergency contact channels, available to parents at any time.
 
 ---
 
