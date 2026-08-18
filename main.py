@@ -1015,6 +1015,304 @@ async def get_my_children(
 
 
 # ============================================================
+# GET_CHILDREN (COMPAT ALIAS)
+# ============================================================
+# الواجهة الأمامية تنادي /get_children?user_id=... لكن هذا
+# المسار ما كان موجوداً بالباك إند فكان يرجّع 404.
+# أضفناه هنا كنسخة متوافقة من /get_my_children، لكن مع
+# نفس الحماية: نتجاهل user_id القادم من الرابط في تحديد
+# البيانات المرجعة ونعتمد فقط على صاحب الجلسة الحالية،
+# ونتحقق أن القيمة المرسلة (إن وُجدت) تطابق صاحب الجلسة
+# حتى لا يُستخدم الرابط لجلب بيانات مستخدم آخر.
+# ============================================================
+
+@app.get("/get_children")
+async def get_children(
+    request: Request,
+    user_id: int | None = None
+):
+
+    current_user_id = require_parent(
+        request
+    )
+
+    if (
+        user_id is not None
+        and
+        user_id != current_user_id
+    ):
+
+        raise HTTPException(
+            status_code=403,
+            detail="لا تملك صلاحية الوصول إلى هذا المستخدم"
+        )
+
+    from database import (
+        SessionLocal,
+        Profile,
+        Session
+    )
+
+    db = SessionLocal()
+
+    try:
+
+        children = (
+            db.query(Profile)
+            .filter(
+                Profile.UserID
+                == current_user_id
+            )
+            .order_by(
+                Profile.ProfileID.asc()
+            )
+            .all()
+        )
+
+        # ------------------------------------------------------
+        # SCORE
+        # ------------------------------------------------------
+        # الفرونت إند يعرض c.score كنسبة مئوية بكرت الطفل.
+        #
+        # نحسب score لكل جلسة لحالها أول:
+        #
+        #   session_score = joy - avg(sadness, fear, anger)
+        #   (مقصوصة بين 0 و100 لكل جلسة على حدة)
+        #
+        # وبعدين ناخذ متوسط الـ session_score الجاهزة عبر كل
+        # الجلسات المحلَّلة لهذا الطفل.
+        #
+        # هذا أدق من حساب متوسط المشاعر الخام أول ثم تطبيق
+        # المعادلة مرة وحدة، لأن جلسة سيئة جداً (فرح=0، حزن=80)
+        # ما تقدر تسحب المتوسط العام بالسالب — أسوأ اشي تسويه
+        # هو تسجّل 0 لتلك الجلسة بس، فما "تعاقب" باقي الجلسات
+        # الجيدة بشكل غير متناسب.
+        #
+        # هذي نفس الطريقة المستخدمة بـ /child_emotion_trend
+        # عشان الرقم اللي يطلع بالكرت الرئيسي يطابق average_score
+        # اللي يطلع بصفحة التفاصيل.
+        # ------------------------------------------------------
+
+        def as_number(value) -> float:
+            try:
+                return float(value)
+            except Exception:
+                return 0.0
+
+        def session_score(emotions: dict) -> int:
+
+            joy = as_number(emotions.get("joy", 0))
+            sadness = as_number(emotions.get("sadness", 0))
+            fear = as_number(emotions.get("fear", 0))
+            anger = as_number(emotions.get("anger", 0))
+
+            negative_avg = (sadness + fear + anger) / 3
+
+            raw_score = joy - negative_avg
+
+            return int(
+                max(0, min(100, round(raw_score)))
+            )
+
+        def get_average_score(child_id: int) -> int:
+
+            sessions_with_analysis = (
+                db.query(Session)
+                .filter(
+                    Session.ChildID == child_id,
+                    Session.EmotionalMap.isnot(None)
+                )
+                .all()
+            )
+
+            if not sessions_with_analysis:
+                return 0
+
+            scores = []
+
+            for s in sessions_with_analysis:
+
+                try:
+                    emotions = json.loads(s.EmotionalMap)
+                except Exception:
+                    continue
+
+                scores.append(
+                    session_score(emotions)
+                )
+
+            if not scores:
+                return 0
+
+            return int(
+                round(
+                    sum(scores) / len(scores)
+                )
+            )
+
+
+        return [
+
+            {
+
+                "id":
+                    child.ProfileID,
+
+                "name":
+                    child.DisplayName,
+
+                "gender":
+                    child.Gender,
+
+                "age":
+                    child.Age,
+
+                "interests":
+                    child.Interests,
+
+                "score":
+                    get_average_score(child.ProfileID)
+
+            }
+
+            for child in children
+        ]
+
+    finally:
+
+        db.close()
+
+
+# ============================================================
+# CHILD EMOTION TREND
+# ============================================================
+# يعرض تاريخ المشاعر جلسة بجلسة لطفل معيّن، بالإضافة إلى
+# مقارنة "الحالي" مقابل "قبل" حتى تقدر صفحة التفاصيل تعرض
+# كم كان الفرح/الحزن/الخوف/الغضب بآخر جلسة، وكم كان قبلها،
+# وكم هو المتوسط العام (نفس الرقم اللي يظهر بكرت الطفل).
+# ============================================================
+
+@app.get("/child_emotion_trend/{child_id}")
+async def child_emotion_trend(
+    request: Request,
+    child_id: int
+):
+
+    require_child_owner(
+        request,
+        child_id
+    )
+
+    from database import (
+        SessionLocal,
+        Session
+    )
+
+    db = SessionLocal()
+
+    try:
+
+        def as_number(value) -> float:
+            try:
+                return float(value)
+            except Exception:
+                return 0.0
+
+        def emotion_score(emotions: dict) -> int:
+
+            joy = as_number(emotions.get("joy", 0))
+            sadness = as_number(emotions.get("sadness", 0))
+            fear = as_number(emotions.get("fear", 0))
+            anger = as_number(emotions.get("anger", 0))
+
+            negative_avg = (sadness + fear + anger) / 3
+
+            return int(
+                max(0, min(100, round(joy - negative_avg)))
+            )
+
+        analyzed_sessions = (
+            db.query(Session)
+            .filter(
+                Session.ChildID == child_id,
+                Session.EmotionalMap.isnot(None)
+            )
+            .order_by(
+                Session.SessionID.asc()
+            )
+            .all()
+        )
+
+        history = []
+
+        for s in analyzed_sessions:
+
+            try:
+                emotions = json.loads(s.EmotionalMap)
+            except Exception:
+                continue
+
+            history.append(
+                {
+                    "session_id": s.SessionID,
+
+                    "date": (
+                        s.EndTime.strftime("%Y-%m-%d %H:%M")
+                        if s.EndTime
+                        else (
+                            s.StartTime.strftime("%Y-%m-%d %H:%M")
+                            if s.StartTime
+                            else ""
+                        )
+                    ),
+
+                    "emotions": {
+                        "joy": as_number(emotions.get("joy", 0)),
+                        "sadness": as_number(emotions.get("sadness", 0)),
+                        "fear": as_number(emotions.get("fear", 0)),
+                        "anger": as_number(emotions.get("anger", 0))
+                    },
+
+                    "score": emotion_score(emotions)
+                }
+            )
+
+        if not history:
+
+            return {
+                "child_id": child_id,
+                "has_data": False,
+                "current": None,
+                "previous": None,
+                "average_score": 0,
+                "history": []
+            }
+
+        current = history[-1]
+
+        previous = history[-2] if len(history) >= 2 else None
+
+        average_score = int(
+            round(
+                sum(item["score"] for item in history) / len(history)
+            )
+        )
+
+        return {
+            "child_id": child_id,
+            "has_data": True,
+            "current": current,
+            "previous": previous,
+            "average_score": average_score,
+            "history": history
+        }
+
+    finally:
+
+        db.close()
+
+
+# ============================================================
 # OLD ENDPOINT
 # ============================================================
 # أبقيناه للتوافق مع بعض الواجهات القديمة،
@@ -2326,7 +2624,7 @@ async def dev_status():
         "enabled": DEV_MODE
     }
 
-# # ============================================================
+# ============================================================
 # DEVELOPMENT SIMULATION
 # ============================================================
 
@@ -2407,6 +2705,7 @@ async def dev_get_children(
 
     finally:
         db.close()
+
 
 # ============================================================
 # RUN
